@@ -1,0 +1,33 @@
+---
+- name: Anderson_DevOps_homework_lesson2_Gumerov
+  hosts: deb10
+  become: yes
+
+
+  vars:
+    repo_url: https://github.com/ShamrockOo4tune/and_devops.git
+    dest: ~/flask_project_dir
+
+  tasks:
+
+  - name: install pip3 and git
+    apt: update_cache=yes name={{ item }} state=present
+    with_items:
+      - git
+      - python3-pip
+
+
+  - name: install flask module
+    shell: pip3 install flask
+
+
+  - name: clone repo
+    git: repo='{{ repo_url }}' dest='{{ dest }}'
+
+
+  - name: separate flaskapp and rm unused repo files
+    shell: mv ~/flask_project_dir/lesson2/flaskapp.py ~/flaskapp.py && rm -rf ~/flask_project_dir
+
+
+  - name: run flaskapp
+    command: python3 ~/flaskapp.py
